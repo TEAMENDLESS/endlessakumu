@@ -1,0 +1,62 @@
+version: "3.9"
+
+services:
+  postgres:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    container_name: postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      TZ: ${PG_TZ}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - ${POSTGRES_VOLUME}:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  ollama:
+    build:
+      context: ./ollama
+      dockerfile: Dockerfile
+      args:
+        OLLAMA_MODEL: ${OLLAMA_MODEL}
+    container_name: ollama
+    environment:
+      OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE}
+    ports:
+      - "${OLLAMA_PORT}:11434"
+    volumes:
+      - ${OLLAMA_MODELS_VOLUME}:/root/.ollama
+    restart: unless-stopped
+
+  chat2db:
+    build:
+      context: ./chat2db
+      dockerfile: Dockerfile
+    container_name: chat2db
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    ports:
+      - "${CHAT2DB_PORT}:10824"
+    environment:
+      OPENAI_API_BASE: ${OPENAI_API_BASE}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    volumes:
+      - chat2db_data:/var/lib/chat2db
+    restart: unless-stopped
+
+volumes:
+  ${POSTGRES_VOLUME}: {}
+  ${OLLAMA_MODELS_VOLUME}: {}
+  chat2db_data: {}
