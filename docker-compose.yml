@@ -57,6 +57,6 @@ services:
     restart: unless-stopped
 
 volumes:
-  ${POSTGRES_VOLUME}: {}
-  ${OLLAMA_MODELS_VOLUME}: {}
+  pgdata: {}
+  ollama_models: {}
   chat2db_data: {}
