@@ -36,7 +36,20 @@ services:
     volumes:
       - ${PGADMIN_VOLUME}:/var/lib/pgadmin
     restart: unless-stopped
-
+  portainer:
+    container_name: portainer
+    restart: unless-stopped
+    build:
+      context: ./portainer
+      dockerfile: Dockerfile
+    ports:
+      - "9443:9443"
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    command: --host-management unix:///var/run/docker.sock
 volumes:
   pgdata: {}
   pgadmin_data: {}
+  portainer_data:
