@@ -32,7 +32,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
-      - "${PGADMIN_PORT}:10824"
+      - "${PGADMIN_PORT}:80"
     volumes:
       - ${PGADMIN_VOLUME}:/var/lib/pgadmin
     restart: unless-stopped
