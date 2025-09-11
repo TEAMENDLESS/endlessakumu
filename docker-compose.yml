@@ -1,4 +1,3 @@
-
 services:
   postgres:
     build:
@@ -21,41 +20,23 @@ services:
       retries: 10
     restart: unless-stopped
 
-  ollama:
+  pgadmin:
     build:
-      context: ./ollama
+      context: ./pgadmin
       dockerfile: Dockerfile
-      args:
-        OLLAMA_MODEL: ${OLLAMA_MODEL}
-    container_name: ollama
-    environment:
-      OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE}
-    ports:
-      - "${OLLAMA_PORT}:11434"
-    volumes:
-      - ${OLLAMA_MODELS_VOLUME}:/root/.ollama
-    restart: unless-stopped
-
-  chat2db:
-    build:
-      context: ./chat2db
-      dockerfile: Dockerfile
-    container_name: chat2db
+    container_name: pgadmin
     depends_on:
       postgres:
         condition: service_healthy
-      ollama:
-        condition: service_started
-    ports:
-      - "${CHAT2DB_PORT}:10824"
     environment:
-      OPENAI_API_BASE: ${OPENAI_API_BASE}
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "${PGADMIN_PORT}:10824"
     volumes:
-      - chat2db_data:/var/lib/chat2db
+      - ${PGADMIN_VOLUME}:/var/lib/pgadmin
     restart: unless-stopped
 
 volumes:
-  ${POSTGRES_VOLUME}: {}
-  ${OLLAMA_MODELS_VOLUME}: {}
-  chat2db_data: {}
+  pgdata: {}
+  pgadmin_data: {}
