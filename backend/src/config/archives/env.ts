@@ -12,12 +12,6 @@ const EnvSchema = z.object({
   DB_USER: z.string().min(1, "DB_USER is required"),
   DB_PASSWORD: z.string().min(1, "DB_PASSWORD is required"),
   DB_NAME: z.string().min(1, "DB_NAME is required"),
-
-  DB_SSL: z.coerce.boolean().default(false),
-  DB_LOGGING: z.coerce.boolean().default(false),
-  DB_POOL_MIN: z.coerce.number().int().min(0).default(0),
-  DB_POOL_MAX: z.coerce.number().int().min(1).default(10),
-  DB_POOL_IDLE: z.coerce.number().int().min(1000).default(10_000),
 });
 
 const parsed = EnvSchema.safeParse(process.env);
@@ -41,13 +35,6 @@ export const DB = {
   name: env.DB_NAME,
   user: env.DB_USER,
   pass: env.DB_PASSWORD,
-  ssl: env.DB_SSL,
-  logging: env.DB_LOGGING,
-  pool: {
-    min: env.DB_POOL_MIN,
-    max: env.DB_POOL_MAX,
-    idle: env.DB_POOL_IDLE,
-  },
 } as const;
 
 export default env;
