@@ -1,4 +1,4 @@
-export type StatusAccount = "pending" | "active" | "inactive" | "suspended";
+export type StatusAccount = "pending" | "active" | "suspended" | "deleted";
 
 export interface AccountRecord {
   id_account: number;
@@ -58,8 +58,12 @@ export interface AccountQuery {
   filters?: AccountFilters;
   limit?: number;
   offset?: number;
-  sort_by?: keyof AccountRecord;
-  order_by?: "created_at" | "reputation" | "username";
+  sort_by?:
+    | "id_account"
+    | "username"
+    | "reputation"
+    | "created_at"
+    | "last_updated";
   sort_order?: "ASC" | "DESC";
 }
 

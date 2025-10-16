@@ -1,8 +1,15 @@
 import { DataTypes, Model } from "sequelize";
-import type {  CreationOptional,  InferAttributes,  InferCreationAttributes } from "sequelize";
+import type {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from "sequelize";
 import { sequelize } from "../../../config/index.js";
 
-export class Account extends Model<  InferAttributes<Account>,  InferCreationAttributes<Account> > {
+export class Account extends Model<
+  InferAttributes<Account>,
+  InferCreationAttributes<Account>
+> {
   declare id_account: CreationOptional<number>;
   declare email: string;
   declare username: string;
