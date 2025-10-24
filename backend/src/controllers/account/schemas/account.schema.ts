@@ -20,6 +20,7 @@ export const CreateAccountSchema = z.object({
   is_phone_verified: z.boolean().default(false),
   reputation: z.number().default(0),
 });
+
 export const UpdateAccountSchema = CreateAccountSchema.partial().extend({
   last_login_at: z.coerce.date().nullable().optional(),
 });
@@ -42,13 +43,7 @@ export const ListQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
   offset: z.coerce.number().int().min(0).default(0),
   sort_by: z
-    .enum([
-      "id_account",
-      "username",
-      "reputation",
-      "created_at",
-      "last_updated",
-    ])
+    .enum(["id_account", "username", "reputation", "created_at", "last_updated"])
     .optional(),
   sort_order: z.enum(["ASC", "DESC"]).default("DESC"),
 });
