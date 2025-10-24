@@ -1,1 +1,0 @@
-export * from "./archives/account.interface.js";

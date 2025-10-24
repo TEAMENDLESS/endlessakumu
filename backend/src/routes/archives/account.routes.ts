@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { accountController } from "../../controllers/index.js";
 
-const router: Router = Router();
+const router : Router = Router();
 
 router.post("/", accountController.create);
 router.get("/", accountController.list);
